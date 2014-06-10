@@ -24,21 +24,24 @@
   -ms-transition: width 0.8s ease-in;
   -o-transition: width 0.8s ease-in;
   transition: width 0.8s ease-in;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 ._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li.showli {
   width: 5em;
 }
 ._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li._ltr-li-wrapper {
-  width: 40%;
+  width: 5em;
   float: left;
+  height: 0.9em;
 }
 ._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li span {
   cursor: pointer;
 }
-._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li:hover {
+._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li.addedTag {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li.addedTag:hover {
   width: auto;
   background-color: #a3a3a3;
 }
@@ -48,6 +51,8 @@
   border: none;
   color: #fff;
   text-shadow: 0 0.1em 0.1em rgba(0, 0, 0, 0.4);
+  top: -0.2em;
+  position: relative;
 }
 ._ltr_l-e-w ._ltr-dtulc input[type=text]:focus {
   outline: 0;
@@ -81,8 +86,9 @@
   width: 5em;
 }
 ._ltr-taglistyle._ltr-li-wrapper {
-  width: 40%;
+  width: 5em;
   float: left;
+  height: 0.9em;
 }
 ._ltr-taglistyle span {
   cursor: pointer;

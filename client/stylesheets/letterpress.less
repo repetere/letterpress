@@ -11,13 +11,15 @@
 			// max-width: 80%;
 			li{
 			    ._ltr-taglistyle();
-			    overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				&:hover{
-					width:auto;
-					background-color: darken(@tagColor,10%);
-				}
+			    &.addedTag{
+				    overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					&:hover{
+						width:auto;
+						background-color: darken(@tagColor,10%);
+					}
+			    }
 			}
 		}
 		input[type=text]{
@@ -26,6 +28,8 @@
 			border: none;
 			color:#fff;
 			text-shadow: 0 0.1em 0.1em rgba(0,0,0,.4);
+			top: -0.2em;
+			position: relative;
 			&:focus{
 				outline: 0;
 			}
@@ -67,8 +71,9 @@
 		width:5em;
 	}
 	&._ltr-li-wrapper{
-		width: 40%;
+		width: 5em;
 		float: left;
+		height:0.9em;
 	}
 	span{
 		cursor: pointer;

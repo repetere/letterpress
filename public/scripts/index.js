@@ -167,7 +167,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 
 		inputLiContainer.appendChild(options.element);
 		inputLiContainer.setAttribute("class","_ltr-taglistyle _ltr-li-wrapper");
-		ultagdivContainer.appendChild(inputLiContainer);
+		ulTagContainer.appendChild(inputLiContainer);
 
 		ulTagContainer.setAttribute("class","_ltr-ulc");
 		ultagdivContainer.appendChild(ulTagContainer);
@@ -233,6 +233,8 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 
 		liToInsert.id="lp-li_"+id;
 		liToInsert.innerHTML=value+' <span class="lp-s-removeTag" data-id="'+id+'">[x]</span>';
+		classie.addClass(liToInsert,"addedTag");
+
 		checkboxToInsert.id="lp-cbx_"+id;
 		checkboxToInsert.name=options.inputNameValue;
 		checkboxToInsert.value=id;
