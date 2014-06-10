@@ -2,19 +2,53 @@
 'use strict';
 
 var letterpress = require('../../lib/letterpress'),
-	letterpressapp;
+	letterpressapp = new letterpress({
+		idSelector : '#tagbuilder',
+		sourcedata : [{
+					"_id":"asdsfsfhiphop",
+					"title":"hip hop",
+				},{
+					"_id":"jdpa9s8edm",
+					"title":"EDM",
+				},{
+					"_id":"asfdasd44",
+					"title":"pop",
+				},{
+					"_id":"ljfhsa34oo",
+					"title":"pop music",
+				},{
+					"_id":"ljfhs9f0jpoo",
+					"title":"pops",
+				},{
+					"_id":"sdfckhunotcy",
+					"title":"country",
+				},{
+					"_id":"sad8p9",
+					"title":"classical",
+				},{
+					"_id":"s;8j;8c87c",
+					"title":"rock",
+				},{
+					"_id":"ijdc89p8",
+					"title":"jazz"
+				},{
+					"_id":"awfj90ew",
+					"title":"progressive house"
+				},{
+					"_id":"fj08afdas",
+					"title":"electronic"
+				}]
+	});
 
 window.onload = function(){
-	letterpressapp = new letterpress({
-		idSelector : '#tagbuilder'
-	});
-	window.letterpressapp = letterpressapp;
-
-	letterpressapp.on("intializedLetterpress",function(data){
-		console.log("loaded letterpress",data);
-	});
+	letterpressapp.init();
 };
 
+window.letterpressapp = letterpressapp;
+
+letterpressapp.on("intializedLetterpress",function(data){
+	console.log("loaded letterpress",data);
+});
 },{"../../lib/letterpress":2}],2:[function(require,module,exports){
 /*
  * letterpress
@@ -53,12 +87,17 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			sourcedata : {},
 			element : null,
 			elementContainer : null,
-			sourcetype : "object"
+			sourcetype : "object",
+			nameLabel: "_id",
+			searchquery: "",
+			valueLabel: "title"
 		},
 		container;
 
 	//extend default options
 	options = extend( defaults,config_options );
+	options.lastddcount = 1;
+	options.currentddcount = 1;
 
 
 	/** Returns the configuration object 
@@ -68,19 +107,10 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 		return options;
 	};
 
-	/** 
-	 * The element to clone in child window
-	 * @param {object} element - html element to clone
-	 */
-	this.setRibbonContentElement = function(element){
-		options.element = element;
-	};
-
 	/**
 	 * intialize a new platter
 	 */
 	this.init = function(callback){
-		console.log("options.idSelector",options.idSelector);
 		if(document.querySelector(options.idSelector)){
 			options.element = document.querySelector(options.idSelector);
 			if(!options.element.name){
@@ -89,6 +119,14 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			else{
 				options.inputNameValue = options.element.name;
 				this.createContainer();
+				if(options.sourcetype ==='objcet' && typeof options.sourcedata !== "array"){
+					throw new Error("object must be an array of objects");
+				}
+				else{
+					this.updateSelectOptionsHTML();
+					this.attachEventListeners();
+					this.emit("intializedLetterpress",true);
+				}
 			}
 		}
 		else{
@@ -119,16 +157,20 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 		/** set up ul and li wrapper */
 		ulTagContainer.setAttribute("id",options.inputNameValue+"-ulc");
 		ultagdivContainer.appendChild(ulTagContainer);
+		options.ulTagContainer = ulTagContainer;
 		ultagdivContainer.appendChild(options.element);
 		options.element.name=options.inputNameValue+"-i";
 
 		/** set up select/optgrp wrapper */
 		selectContainer.setAttribute("id",options.inputNameValue+"-sc");
+		selectContainer.setAttribute("name",options.inputNameValue+"-sc");
 		options.elementContainer.appendChild(selectContainer);
+		options.selectContainer = selectContainer;
 
 		/** set up checkbox wrapper */
 		lpCheckboxContainer.setAttribute("id",options.inputNameValue+"-cbc");
 		options.elementContainer.appendChild(lpCheckboxContainer);
+		options.lpCheckboxContainer = lpCheckboxContainer;
 
 		this.emit("letterpressContainerCreated",letterpressContainer);
 	};
@@ -137,27 +179,105 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	 * create letterpress html
 	 * @param {string} id name for platter selector id
 	 */
-	this.createRibbon = function(id){
-		var letterpressHTML = (document.querySelector(id)) ? document.querySelector(id) : document.createElement('div');
-		/** create platter tab html */
-		classie.addClass(letterpressHTML,'_mms_letterpress-element');
-		classie.addClass(letterpressHTML,'future');
-		classie.addClass(letterpressHTML,options.style);
-		letterpressHTML.innerHTML =options.message;
-		/** add platter tab to tab bar */
-		document.querySelector('#_mms_letterpress-element-wrapper').appendChild(letterpressHTML);
-		this.emit("letterpressCreated",letterpressHTML);
+	this.setDataObject = function(obj){
+		if(typeof obj !== "array"){
+			throw new Error("object must be an array of objects");
+		}
+		else{
+			options.sourcedata = obj;
+		}
 	};
 
+	/**
+	 * creates select dropdown with tags from source data
+	 * @param {string} id name for platter selector id
+	 */
+	this.updateSelectOptionsHTML = function(){
+		var selectOptionHTML ='',
+			searchRegEx = new RegExp('^'+options.searchquery, "i");
+		options.numOfOptions = 0;
+		options.lastddcount = options.currentddcount;
 
-	var letterpressClickEventHandler = function(e){
-		var etarget = e.target;
-		if(classie.hasClass(etarget,'_rb-hide-letterpress')){
-			this.hideRibbon();
+
+		selectOptionHTML += '<option value="SELECT" >Select Tag</option>';
+		for(var x in options.sourcedata){
+			if(options.sourcedata[x][options.valueLabel].match(searchRegEx) && options.searchquery.length >0){
+				selectOptionHTML += '<option value="'+options.sourcedata[x][options.nameLabel]+'" label="'+options.sourcedata[x][options.valueLabel]+'">'+options.sourcedata[x][options.valueLabel]+'</option>';
+				options.numOfOptions++;
+			}
+		}
+		if(options.numOfOptions === 0 && options.searchquery.length >0){
+			selectOptionHTML += '<option value="NEWTAG">Create Tag</option>';
+		}
+		options.selectContainer.innerHTML = selectOptionHTML;
+		options.currentddcount = options.selectContainer.length;
+		this.emit("updatedSelectOptions");
+	};
+
+	/**
+	 * create letterpress html
+	 * @param {string} id name for platter selector id
+	 */
+	this.createTag = function(id,value){
+		var searchterm = options.searchquery,
+			liToInsert = document.createElement('li'),
+			checkboxToInsert = document.createElement('input');
+		options.searchquery = '';
+		options.element.value = '';
+
+		liToInsert.id="lp-li_"+id;
+		liToInsert.innerHTML=value+'<span>[x]</span>';
+		checkboxToInsert.id="lp-cbx_"+id;
+		checkboxToInsert.name=options.inputNameValue;
+		checkboxToInsert.value=id;
+		checkboxToInsert.type="checkbox";
+		checkboxToInsert.setAttribute("checked","checked");
+		checkboxToInsert.innerHTML=value;
+		if(options.ulTagContainer.innerHTML.match(id)){
+			console.log("already added");
+		}
+		else{
+			options.ulTagContainer.appendChild(liToInsert);
+			options.lpCheckboxContainer.appendChild(checkboxToInsert);
+			this.updateSelectOptionsHTML();
 		}
 	}.bind(this);
 
-	this.init();
+	this.attachEventListeners = function(){
+		options.element.addEventListener("keyup", letterpressInputKeydownEventHandler,false);
+		options.selectContainer.addEventListener("change",letterpressSelectChangeEventHandler,false);
+		options.selectContainer.addEventListener("select",letterpressSelectChangeEventHandler,false);
+		options.selectContainer.addEventListener("click",letterpressClickSelect,false);
+	};
+
+	var letterpressInputKeydownEventHandler = function(e){
+		var etarget = e.target;
+			options.searchquery = etarget.value;
+
+		this.updateSelectOptionsHTML();
+		if(options.searchquery.length>0 && options.numOfOptions>0 && options.currentddcount !== options.lastddcount){
+			var evt = document.createEvent("MouseEvents");
+			evt.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			options.selectContainer.dispatchEvent(evt);
+		}
+		if (e.keyCode === 13) {
+			console.log("enter press");
+		}
+	}.bind(this);
+
+	var letterpressSelectChangeEventHandler = function(e){
+		this.createTag( options.selectContainer.value, document.querySelector("#"+options.selectContainer.id+" option[value="+options.selectContainer.value+"]").innerHTML);
+	}.bind(this);
+
+	var letterpressSelectSelectEventHandler = function(e){
+		console.log("val select");
+	}.bind(this);
+
+	var letterpressClickSelect = function(e){
+		console.log("select clicked");
+	};
+
+	// this.init();
 
 	function callCallBack(callback){
 		if(typeof callback ==='function'){
