@@ -166,7 +166,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 		ulTagContainer.setAttribute("id",options.inputNameValue+"-ulc");
 
 		inputLiContainer.appendChild(options.element);
-		inputLiContainer.setAttribute("class","_ltr-taglistyle _ltr-li-wrapper");
+		inputLiContainer.setAttribute("class","_ltr-taglistyle showli _ltr-li-wrapper");
 		ulTagContainer.appendChild(inputLiContainer);
 
 		ulTagContainer.setAttribute("class","_ltr-ulc");
@@ -230,9 +230,11 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			checkboxToInsert = document.createElement('input');
 		options.searchquery = '';
 		options.element.value = '';
+		classie.removeClass(options.selectContainer,"show");
 
 		liToInsert.id="lp-li_"+id;
-		liToInsert.innerHTML=value+' <span class="lp-s-removeTag" data-id="'+id+'">[x]</span>';
+		liToInsert.setAttribute("title",value);
+		liToInsert.innerHTML='<span class="lp-s-removeTag" data-id="'+id+'">[x]</span> '+value;
 		classie.addClass(liToInsert,"addedTag");
 
 		checkboxToInsert.id="lp-cbx_"+id;
@@ -248,13 +250,16 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			options.ulTagContainer.appendChild(liToInsert);
 			options.lpCheckboxContainer.appendChild(checkboxToInsert);
 			classie.addClass(liToInsert,"showli");
+			options.element.focus();
 			this.updateSelectOptionsHTML();
+			this.emit("createdTag",id);
 		}
 	}.bind(this);
 
 	this.removeTag = function(id){
 		domhelper.removeElement(document.getElementById('lp-cbx_'+id));
 		domhelper.removeElement(document.getElementById('lp-li_'+id));
+		this.emit("removedTag",id);
 	}.bind(this);
 
 	this.attachEventListeners = function(){
@@ -269,6 +274,9 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	var letterpressInputKeydownEventHandler = function(e){
 		var etarget = e.target;
 			options.searchquery = etarget.value;
+		if(options.numOfOptions>0){
+			classie.addClass(options.selectContainer,"show");
+		}
 
 		this.updateSelectOptionsHTML();
 		if (e.keyCode === 13 ) {

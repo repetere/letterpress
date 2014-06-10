@@ -17,7 +17,7 @@
 					text-overflow: ellipsis;
 					&:hover{
 						width:auto;
-						background-color: darken(@tagColor,10%);
+						background-color: darken(#eaeaea, 10%);
 					}
 			    }
 			}
@@ -26,8 +26,8 @@
 			width: 99%;
 			background: none;
 			border: none;
-			color:#fff;
-			text-shadow: 0 0.1em 0.1em rgba(0,0,0,.4);
+			color:#111;
+			// text-shadow: 0 0.1em 0.1em rgba(0,0,0,.4);
 			top: -0.2em;
 			position: relative;
 			&:focus{
@@ -37,6 +37,10 @@
 	}
 	._ltr-sc{
 		width: 100%;
+		display: none;
+		&.show{
+			display: inline-block;
+		}
 	}
 	._ltr-cbc{
 		display: none;
@@ -51,24 +55,26 @@
 	transition: @tprop;
 }
 ._ltr-border{
-	border: 1px solid darken(#efefef,20%);
+	border: 1px solid darken(#eaeaea,10%);
 }
-@tagColor: darken(#efefef,20%);
+@tagColor: darken(#eaeaea, 10%);//darken(#efefef,20%);
 
 ._ltr-taglistyle{
 	display: inline-block;
 	padding: 0.2em;
-	// border: solid 0.1em black;
+	._ltr-border();
 	margin: 0.2em;
-	background: @tagColor;
-	color: #fff;
+	background: #eaeaea;
+	color: darken(#eaeaea,40%);
 	width:0em;
+	opacity: 0;
 	height: 1em;
 	line-height: 1.0em;
-	text-shadow: 0 0.1em 0.1em rgba(0,0,0,.4);
-	.transition(width 0.8s ease-in;);
+	// text-shadow: 0 0.1em 0.1em rgba(0,0,0,.4);
+	.transition(width 1s ease-in, opacity .5s ease-in;);
 	&.showli{
-		width:5em;
+		width:auto;
+		opacity: 1;
 	}
 	&._ltr-li-wrapper{
 		width: 5em;
