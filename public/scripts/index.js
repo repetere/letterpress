@@ -206,9 +206,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 				options.numOfOptions++;
 			}
 		}
-		if(options.numOfOptions === 0 && options.searchquery.length >0){
-			selectOptionHTML += '<option value="NEWTAG">Create Tag</option>';
-		}
+		selectOptionHTML += '<option value="NEWTAG">Create Tag</option>';
 		options.selectContainer.innerHTML = selectOptionHTML;
 		options.currentddcount = options.selectContainer.length;
 		this.emit("updatedSelectOptions");
@@ -255,12 +253,20 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			options.searchquery = etarget.value;
 
 		this.updateSelectOptionsHTML();
-		if(options.searchquery.length>0 && options.numOfOptions>0 && options.currentddcount !== options.lastddcount){
-			var evt = document.createEvent("MouseEvents");
-			evt.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-			options.selectContainer.dispatchEvent(evt);
-		}
-		if (e.keyCode === 13) {
+		// if(options.searchquery.length>0 && options.numOfOptions>0 && options.currentddcount !== options.lastddcount){
+		// 	var evt = document.createEvent("MouseEvents");
+		// 	evt.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		// 	options.selectContainer.dispatchEvent(evt);
+		// }
+		if (e.keyCode === 13 ) {
+			if(options.numOfOptions>0){
+				var evt = document.createEvent("MouseEvents");
+				evt.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+				options.selectContainer.dispatchEvent(evt);
+			}
+			else{
+				console.log("options.numOfOptions",options.numOfOptions,"create tag");
+			}
 			console.log("enter press");
 		}
 	}.bind(this);
