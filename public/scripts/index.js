@@ -199,7 +199,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 		options.lastddcount = options.currentddcount;
 
 
-		selectOptionHTML += '<option value="SELECT" >Select Tag</option>';
+		selectOptionHTML += '<option value="SELECT" disabled=disabled>Select Tag</option>';
 		for(var x in options.sourcedata){
 			if(options.sourcedata[x][options.valueLabel].match(searchRegEx) && options.searchquery.length >0){
 				selectOptionHTML += '<option value="'+options.sourcedata[x][options.nameLabel]+'" label="'+options.sourcedata[x][options.valueLabel]+'">'+options.sourcedata[x][options.valueLabel]+'</option>';
@@ -245,6 +245,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 		options.element.addEventListener("keyup", letterpressInputKeydownEventHandler,false);
 		options.selectContainer.addEventListener("change",letterpressSelectChangeEventHandler,false);
 		options.selectContainer.addEventListener("select",letterpressSelectChangeEventHandler,false);
+		options.selectContainer.addEventListener("keyup",letterpressSelectKeydownEventHandler,false);
 		options.selectContainer.addEventListener("click",letterpressClickSelect,false);
 	};
 
@@ -253,11 +254,6 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			options.searchquery = etarget.value;
 
 		this.updateSelectOptionsHTML();
-		// if(options.searchquery.length>0 && options.numOfOptions>0 && options.currentddcount !== options.lastddcount){
-		// 	var evt = document.createEvent("MouseEvents");
-		// 	evt.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-		// 	options.selectContainer.dispatchEvent(evt);
-		// }
 		if (e.keyCode === 13 ) {
 			if(options.numOfOptions>0){
 				var evt = document.createEvent("MouseEvents");
@@ -268,6 +264,13 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 				console.log("options.numOfOptions",options.numOfOptions,"create tag");
 			}
 			console.log("enter press");
+		}
+	}.bind(this);
+
+	var letterpressSelectKeydownEventHandler = function(e){
+		if (e.keyCode === 13 ) {
+			options.element.focus();
+			console.log("enter press on select drop down");
 		}
 	}.bind(this);
 
