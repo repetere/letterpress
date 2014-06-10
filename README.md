@@ -5,7 +5,7 @@ ajax tag creation
 
 ex local object:
 -------
-	var letterpress = require("letterpress");
+	var letterpress = require("letterpressjs");
 	
 	letterpresscb = new letterpress({
 		idSelector : '#tagbuilder',
@@ -27,7 +27,7 @@ ex local object:
 
 ex json custom callback:
 -------
-	var letterpress = require("letterpress");
+	var letterpress = require("letterpressjs");
 	
 	var letterpresscb = new letterpress({
 		idSelector : '#tagremotebuilder',
@@ -49,7 +49,7 @@ ex json custom callback:
 
 ex jsonp:
 -------
-	var letterpress = require("letterpress");
+	var letterpress = require("letterpressjs");
 	
 	var letterpresscb = new letterpress({
 		idSelector : '#tagremotebuilder',
