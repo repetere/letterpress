@@ -38,9 +38,34 @@ var letterpress = require('../../lib/letterpress'),
 					"title":"electronic"
 				}]
 	});
+	//jsonp
+	// var letterpressremoteapp = new letterpress({
+	// 	idSelector : '#tagremotebuilder',
+	// 	sourcedata: 'http://local.getperiodic.com:8080/post/search?callback=jsonpcb',
+	// 	sourcearrayname: 'posts',
+	// 	sourcecallback: 'jsonpcb',
+	// 	sourcejsonp:true
+	// });
+	//json + custom callback
+	var letterpressremoteapp = new letterpress({
+		idSelector : '#tagremotebuilder',
+		sourcedata: 'http://local.getperiodic.com:8080/post/search',
+		sourcearrayname: 'posts',
+		createTagFunc:function(id,val,callback){
+			//do db stuff
+			// console.log("couldn't create tag");
+			// callback(null,null,new Error("couldnt create in db"));
+			console.log("creating tag in db");
+			setTimeout(function(){
+				console.log("db done");
+				callback('idfromdb',val);
+			},1000);
+		}
+	});
 
 window.onload = function(){
 	letterpressapp.init();
+	letterpressremoteapp.init();
 };
 
 window.letterpressapp = letterpressapp;

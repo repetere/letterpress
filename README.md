@@ -1,35 +1,64 @@
-letterpress
+letterpress [![Build Status](https://travis-ci.org/typesettin/letterpress.svg?branch=master)](https://travis-ci.org/typesettin/letterpress) [![NPM version](https://badge.fury.io/js/letterpressjs.svg)](http://badge.fury.io/js/letterpressjs)
 ===========
 
 ajax tag creation
 
-todo:
+ex local object:
+-------
+	var letterpress = require("letterpress");
+	
+	letterpresscb = new letterpress({
+		idSelector : '#tagbuilder',
+		sourcedata : [{
+					"_id":"asdsfsfhiphop",
+					"title":"hip hop",
+				},{
+					"_id":"jdpa9s8edm",
+					"title":"EDM",
+				},{
+					"_id":"asfdasd44",
+					"title":"pop",
+				}]
+	});
 
-take input, add wrapper, inside wrapper div have ul (container for tags) then new input for event handler
+	window.onload = function(){
+		letterpresscb.init();
+	};
 
-requires superagent for ajax
+ex json custom callback:
+-------
+	var letterpress = require("letterpress");
+	
+	var letterpresscb = new letterpress({
+		idSelector : '#tagremotebuilder',
+		sourcedata: 'http://local.getperiodic.com:8080/post/search',
+		sourcearrayname: 'posts',
+		createTagFunc:function(id,val,callback){
+			console.log("creating tag in db");
+			setTimeout(function(){
+				console.log("db done");
+				callback('idfromdb',val,err);
+			},1000);
+		}
+	});
 
-config
-- input element
-- source (either object or ajax)
+	window.onload = function(){
+		letterpresscb.init();
+	};
 
-div.wrapper
-- ul.tagwrapper
-- - li - tags (div, text, close button)
-- input text (tag input)
-- drop down div of tags options
-- - new tag if empty
-- hidden option group
-- - selected tags, name is original input, option value(value is selected tag)
 
-event listeners
-- keypress on tag input
-- - keydown on drop down over tag options
-- - keydown (enter - select tag)
-- - keydown (escape - cancel)
+ex jsonp:
+-------
+	var letterpress = require("letterpress");
+	
+	var letterpresscb = new letterpress({
+		idSelector : '#tagremotebuilder',
+		sourcedata: 'http://local.getperiodic.com:8080/post/search?callback=jsonpcb',
+		sourcearrayname: 'posts',
+		sourcecallback: 'jsonpcb',
+		sourcejsonp:true
+	});
 
-- click on tag x
-- - removes tag from ul, also removes element from option group
-
-- data needs to be array of options
-[{_id:id, title:title}]
+	window.onload = function(){
+		letterpresscb.init();
+	};

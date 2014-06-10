@@ -2,6 +2,7 @@
 	display: inline-block;
 	padding: 0.2em;
 	border: 0.1em solid @tagColor;
+	position: relative;
 	._ltr-dtulc{
 		._ltr-ulc{
 			float: left;
@@ -38,6 +39,10 @@
 	._ltr-sc{
 		width: 100%;
 		display: none;
+		position: absolute;
+		left: 0;
+		height: 1em;
+		bottom: -1.8em;
 		&.show{
 			display: inline-block;
 		}

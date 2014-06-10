@@ -2,6 +2,7 @@
   display: inline-block;
   padding: 0.2em;
   border: 0.1em solid #d1d1d1;
+  position: relative;
 }
 ._ltr_l-e-w ._ltr-dtulc ._ltr-ulc {
   float: left;
@@ -61,6 +62,10 @@
 ._ltr_l-e-w ._ltr-sc {
   width: 100%;
   display: none;
+  position: absolute;
+  left: 0;
+  height: 1em;
+  bottom: -1.8em;
 }
 ._ltr_l-e-w ._ltr-sc.show {
   display: inline-block;
