@@ -151,6 +151,11 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 				this.updateSelectOptionsHTML();
 				this.attachEventListeners();
 				this.emit("intializedLetterpress",true);
+				if(options.presetdata){
+					for(var y in options.presetdata){
+						this.createTag(options.presetdata[y][options.nameLabel],options.presetdata[y][options.valueLabel],null,true);
+					}
+				}
 			}
 		}.bind(this);
 
@@ -247,11 +252,27 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	 * @param {string} id name for platter selector id
 	 */
 	this.setDataObject = function(obj){
-		if(typeof obj !== "array"){
+		if(obj instanceof Array ===false){
 			throw new Error("object must be an array of objects");
 		}
 		else{
 			options.sourcedata = obj;
+		}
+	};
+
+	/**
+	 * create letterpress html
+	 * @param {string} id name for platter selector id
+	 */
+	this.setPreloadDataObject = function(obj){
+		if(obj instanceof Array ===false){
+			throw new Error("object must be an array of objects");
+		}
+		else{
+			options.presetdata = obj;
+			for(var y in options.presetdata){
+				this.createTag(options.presetdata[y][options.nameLabel],options.presetdata[y][options.valueLabel],null,true);
+			}
 		}
 	};
 
@@ -283,7 +304,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	 * create letterpress html
 	 * @param {string} id name for platter selector id
 	 */
-	this.createTag = function(id,value,err){
+	this.createTag = function(id,value,err,keeppreviousfocus){
 		if(err){
 			throw err;
 		}
@@ -293,7 +314,9 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 				checkboxToInsert = document.createElement('input');
 			options.searchquery = '';
 			options.element.value = '';
-			classie.removeClass(options.selectContainer,"show");
+			if(keeppreviousfocus!==true){
+				classie.removeClass(options.selectContainer,"show");
+			}
 
 			liToInsert.id="lp-li_"+id;
 			liToInsert.setAttribute("title",value);
@@ -306,16 +329,25 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			checkboxToInsert.type="checkbox";
 			checkboxToInsert.setAttribute("checked","checked");
 			checkboxToInsert.innerHTML=value;
-			if(options.ulTagContainer.innerHTML.match(id)){
+			if(keeppreviousfocus!==true && options.ulTagContainer.innerHTML.match(id)){
 				// console.log("already added");
 				this.emit("duplicateTag",id);
 			}
 			else{
-				options.ulTagContainer.appendChild(liToInsert);
-				options.lpCheckboxContainer.appendChild(checkboxToInsert);
-				classie.addClass(liToInsert,"showli");
-				options.element.focus();
-				this.updateSelectOptionsHTML();
+				try{
+					options.ulTagContainer.appendChild(liToInsert);
+					options.lpCheckboxContainer.appendChild(checkboxToInsert);
+					classie.addClass(liToInsert,"showli");
+				}
+				catch(e){
+					if(options.debug){
+						console.log("error",e);
+					}
+				}
+				if(keeppreviousfocus!==true){
+					options.element.focus();
+					this.updateSelectOptionsHTML();
+				}
 				this.emit("createdTag",id);
 			}
 		}
@@ -368,18 +400,13 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	}.bind(this);
 
 	var letterpressSelectChangeEventHandler = function(e){
-		// console.log("select drop down value change");
-
 		options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val,err){
 			this.createTag(id,val,err);
 		}.bind(this));
-		// this.createTag( options.selectContainer.value, document.querySelector("#"+options.selectContainer.id+" option[value='"+options.selectContainer.value+"']").innerHTML);
 	}.bind(this);
 
 	var letterpressSelectSelectEventHandler = function(e){
 		console.log("select drop down value select");
-		// this.createTag( options.selectContainer.value, document.querySelector("#"+options.selectContainer.id+" option[value='"+options.selectContainer.value+"']").innerHTML);
-		// 
 		options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val,err){
 			this.createTag(id,val,err);
 		}.bind(this));
@@ -395,8 +422,6 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			this.removeTag(etarget.getAttribute("data-id"));
 		}
 	}.bind(this);
-
-	// this.init();
 
 	function callCallBack(callback){
 		if(typeof callback ==='function'){
