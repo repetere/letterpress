@@ -352,7 +352,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			}
 			else{
 				// console.log("options.numOfOptions",options.numOfOptions,"create tag");
-				options.createTagFunc(options.searchquery+'-id',options.searchquery,function(id,val,err){
+				options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val,err){
 					this.createTag(id,val,err);
 				}.bind(this));
 			}
@@ -370,7 +370,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	var letterpressSelectChangeEventHandler = function(e){
 		// console.log("select drop down value change");
 
-		options.createTagFunc(options.searchquery+'-id',options.searchquery,function(id,val){
+		options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val){
 			this.createTag(id,val);
 		}.bind(this));
 		// this.createTag( options.selectContainer.value, document.querySelector("#"+options.selectContainer.id+" option[value='"+options.selectContainer.value+"']").innerHTML);
@@ -380,7 +380,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 		// console.log("select drop down value select");
 		// this.createTag( options.selectContainer.value, document.querySelector("#"+options.selectContainer.id+" option[value='"+options.selectContainer.value+"']").innerHTML);
 		// 
-		options.createTagFunc(options.searchquery+'-id',options.searchquery,function(id,val){
+		options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val){
 			this.createTag(id,val);
 		}.bind(this));
 	}.bind(this);
