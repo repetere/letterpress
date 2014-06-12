@@ -72,6 +72,7 @@
 }
 ._ltr_l-e-w ._ltr-sc.show {
   display: inline-block;
+  z-index: 100;
 }
 ._ltr_l-e-w ._ltr-cbc {
   display: none;
