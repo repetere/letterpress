@@ -169,22 +169,27 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 				if(options.sourcedata instanceof Array ===false){
 					request
 						.get(options.sourcedata)
-						.end(function(res){
-							if(options.sourcejsonp){
-								window[options.sourcecallback] = function(data){
-									// console.log(data);
-									options.sourcedata = data[options.sourcearrayname];
-									// console.log(this.config().sourcedata);
-									createLetterPress();
-								}.bind(this);
-								var scriptTag = document.createElement("script");
-
-								scriptTag.innerHTML = res.text;
-								document.body.appendChild(scriptTag);
+						.end(function(err,res){
+							if(err){
+								console.log(err);
 							}
 							else{
-								options.sourcedata = res.body[options.sourcearrayname];
-								createLetterPress();
+								if(options.sourcejsonp){
+									window[options.sourcecallback] = function(data){
+										// console.log(data);
+										options.sourcedata = data[options.sourcearrayname];
+										// console.log(this.config().sourcedata);
+										createLetterPress();
+									}.bind(this);
+									var scriptTag = document.createElement("script");
+
+									scriptTag.innerHTML = res.text;
+									document.body.appendChild(scriptTag);
+								}
+								else{
+									options.sourcedata = res.body[options.sourcearrayname];
+									createLetterPress();
+								}
 							}
 						}.bind(this));
 				}
@@ -335,6 +340,7 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 			}
 			else{
 				try{
+					// options.element.parentNode.insertBefore(liToInsert,options.element);
 					options.ulTagContainer.appendChild(liToInsert);
 					options.lpCheckboxContainer.appendChild(checkboxToInsert);
 					classie.addClass(liToInsert,"showli");
@@ -400,13 +406,19 @@ var letterpress = function(config_options,letterpress_message,show,timed,callbac
 	}.bind(this);
 
 	var letterpressSelectChangeEventHandler = function(e){
-		options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val,err){
-			this.createTag(id,val,err);
-		}.bind(this));
+		console.log("select drop down value select",options.selectContainer.value);
+		var taglabel = (options.selectContainer.value ==='SELECT' || options.selectContainer.value ==='NEWTAG')? options.searchquery : document.querySelector('option[value="'+options.selectContainer.value+'"]').innerHTML;
+		options.createTagFunc(
+			options.selectContainer.value,
+			taglabel,
+			function(id,val,err){
+				this.createTag(id,val,err);
+			}.bind(this)
+		);
 	}.bind(this);
 
 	var letterpressSelectSelectEventHandler = function(e){
-		console.log("select drop down value select");
+		console.log("select drop down value select", options.selectContainer.value);
 		options.createTagFunc(options.selectContainer.value,options.searchquery,function(id,val,err){
 			this.createTag(id,val,err);
 		}.bind(this));
