@@ -1,14 +1,14 @@
 {
   "name": "letterpressjs",
   "description": "tag creator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "engines": {
     "node": ">=0.10.x"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/typesettin/ribbon.git"
+    "url": "git://github.com/typesettin/letterpress.git"
   },
   "scripts": {
     "test": "mocha -R spec --recursive"
