@@ -16,11 +16,12 @@
   border: 1px solid #d1d1d1;
   margin: 0.2em;
   background: #eaeaea;
-  color: #848484;
+  color: #333;
   width: 0em;
   opacity: 0;
   height: 1em;
   line-height: 1.0em;
+  font-size: 70%;
   -webkit-transition: width 1s ease-in, opacity 0.5s ease-in;
   -moz-transition: width 1s ease-in, opacity 0.5s ease-in;
   -ms-transition: width 1s ease-in, opacity 0.5s ease-in;
@@ -34,7 +35,6 @@
 ._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li._ltr-li-wrapper {
   width: 5em;
   float: left;
-  height: 0.9em;
 }
 ._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li span {
   cursor: pointer;
@@ -48,12 +48,15 @@
   width: auto;
   background-color: #d1d1d1;
 }
+._ltr_l-e-w ._ltr-dtulc ._ltr-ulc li .lp-s-removeTag {
+  font-weight: bold;
+}
 ._ltr_l-e-w ._ltr-dtulc input[type=text] {
   width: 99%;
   background: none;
   border: none;
   color: #111;
-  top: -0.2em;
+  top: -0.6em;
   position: relative;
 }
 ._ltr_l-e-w ._ltr-dtulc input[type=text]:focus {
@@ -69,6 +72,7 @@
 }
 ._ltr_l-e-w ._ltr-sc.show {
   display: inline-block;
+  z-index: 100;
 }
 ._ltr_l-e-w ._ltr-cbc {
   display: none;
@@ -82,11 +86,12 @@
   border: 1px solid #d1d1d1;
   margin: 0.2em;
   background: #eaeaea;
-  color: #848484;
+  color: #333;
   width: 0em;
   opacity: 0;
   height: 1em;
   line-height: 1.0em;
+  font-size: 70%;
   -webkit-transition: width 1s ease-in, opacity 0.5s ease-in;
   -moz-transition: width 1s ease-in, opacity 0.5s ease-in;
   -ms-transition: width 1s ease-in, opacity 0.5s ease-in;
@@ -100,7 +105,6 @@
 ._ltr-taglistyle._ltr-li-wrapper {
   width: 5em;
   float: left;
-  height: 0.9em;
 }
 ._ltr-taglistyle span {
   cursor: pointer;
